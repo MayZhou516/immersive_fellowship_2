@@ -10,9 +10,19 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      users : [] 
+      users : [],
+      editing: ''
     }; 
     //this.addRandomUser = this.addRandomUser.bind(this);
+  }
+  goToEditMode = (id)=> {
+    this.setState({ editing: id });
+  }
+  edit = (user)=> {
+    const users = this.state.users.map( _user => {
+      return _user.id === user.id ? user : _user
+    });
+    this.setState({ users, editing: '' });
   }
   deleteUser = (id)=> {
     const users  = this.state.users.filter( user => user.id !== id);
@@ -34,13 +44,13 @@ export default class App extends React.Component{
   }
   render(){
     const { title } = this.props;
-    const { users } = this.state;
-    const { addRandomUser, addUser, deleteUser } = this;
+    const { users, editing } = this.state;
+    const { addRandomUser, addUser, deleteUser, goToEditMode, edit } = this;
     return ( 
       <div>
         <Title title={ title }/>
         <UserForm addRandomUser={ addRandomUser } addUser={ addUser }/>
-        <Users users={ users } deleteUser={ deleteUser }/>
+        <Users users={ users } deleteUser={ deleteUser } goToEditMode={ goToEditMode } editing={ editing } edit={ edit }/>
       </div>
     );
   }   
